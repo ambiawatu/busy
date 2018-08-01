@@ -11,11 +11,15 @@ phases:
       - $(aws ecr get-login --no-include-email --region us-east-2)
   build:
     commands:
-      - sbt test
-      - sbt docker:publish
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -t busy:latest .
+      - docker tag busy:latest 839736389191.dkr.ecr.us-east-2.amazonaws.com/busy:latest      
   post_build:
     commands:
       - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 839736389191.dkr.ecr.us-east-2.amazonaws.com/busy:latest
 artifacts:
   files:
     - Dockerrun.aws.json
